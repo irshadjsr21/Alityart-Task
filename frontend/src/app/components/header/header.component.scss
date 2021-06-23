@@ -1,0 +1,33 @@
+.banner {
+  width: 100%;
+  background-color: rgb(117, 133, 26);
+  padding: 15px;
+  margin-bottom: 10px;
+
+  .banner-logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .banner-logo {
+      height: 100px;
+      width: auto;
+    }
+  }
+
+  h1 {
+    text-align: center;
+  }
+}
+
+.info-text {
+  font-size: 15px;
+  font-weight: lighter;
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 70%;
+  height: 1px;
+  background-color: rgb(84, 91, 94);
+  margin: auto;
+}

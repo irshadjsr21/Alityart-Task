@@ -1,0 +1,95 @@
+<section>
+  <div *ngIf="isLoading" class="d-flex justify-content-center mt-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isLoading"
+    class="category-container d-flex justify-content-center"
+  >
+    <div *ngFor="let category of categories">
+      <button
+        type="button"
+        class="btn me-2"
+        [ngClass]="{
+          'btn-primary': category.id === selectedCategory,
+          'btn-light': category.id !== selectedCategory
+        }"
+        (click)="onClick(category)"
+      >
+        {{ category.name }}
+      </button>
+    </div>
+    <button type="button" class="btn btn-secondary" (click)="onAddOpen()">
+      + Add
+    </button>
+  </div>
+  <div class="backdrop" [ngClass]="{ show: showAddCategory }"></div>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    [ngClass]="{ show: showAddCategory }"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    [style]="showAddCategory ? 'display: block;' : 'display: none'"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="onAddClose()"
+            [disabled]="isAddLoading"
+          ></button>
+        </div>
+        <form [formGroup]="addFormData" (ngSubmit)="onAddSubmit()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="category-name" class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="category-name"
+                placeholder="Name"
+                formControlName="name"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              (click)="onAddClose()"
+              [disabled]="isAddLoading"
+            >
+              Close
+            </button>
+            <button
+              [disabled]="!addFormData.valid"
+              type="submit"
+              class="btn btn-primary"
+            >
+              <div
+                *ngIf="isAddLoading"
+                class="spinner-border text-primary"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span *ngIf="!isAddLoading">Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
