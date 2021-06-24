@@ -7,7 +7,7 @@ export interface CategoryAttributes {
 }
 
 /*
-  We have to declare the AuthorCreationAttributes to
+  We have to declare the ProductCreationAttributes to
   tell Sequelize and TypeScript that the property id,
   in this case, is optional to be passed at creation time
 */
