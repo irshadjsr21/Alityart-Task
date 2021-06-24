@@ -56,7 +56,7 @@ export const list = createController(
     const {
       sort: rawSortBy,
       order: rawOrder,
-      category: rawCategory
+      categoryId: rawCategory
     } = req.query;
 
     let page = 1;

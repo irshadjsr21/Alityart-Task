@@ -4,6 +4,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import Category from '../../models/category';
 import { CategoryService } from '../../services/category.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-category-bar',
@@ -30,8 +31,10 @@ export class CategoryBarComponent implements OnInit, OnDestroy {
   public isAddError = '';
 
   private addDataSubscription?: Subscription;
+  private deleteCategorySubscription?: Subscription;
 
   constructor(
+    private productService: ProductService,
     private categoryService: CategoryService,
     private fb: FormBuilder
   ) {
@@ -67,12 +70,24 @@ export class CategoryBarComponent implements OnInit, OnDestroy {
       }
     );
 
+    this.deleteCategorySubscription = this.categoryService.deleteCategoryObserver.subscribe(
+      deletedId => {
+        if (this.selectedCategory === deletedId) {
+          this.selectedCategory = '';
+          this.productService.setCategoryId(this.selectedCategory);
+        }
+      }
+    );
+
     this.categoryService.load();
   }
 
   ngOnDestroy() {
     if (this.categorySubscription) {
       this.categorySubscription.unsubscribe();
+    }
+    if (this.deleteCategorySubscription) {
+      this.deleteCategorySubscription.unsubscribe();
     }
     if (this.addDataSubscription) {
       this.addDataSubscription.unsubscribe();
@@ -81,6 +96,7 @@ export class CategoryBarComponent implements OnInit, OnDestroy {
 
   public onClick(category: Category) {
     this.selectedCategory = category.id;
+    this.productService.setCategoryId(this.selectedCategory);
   }
 
   public onAddOpen() {

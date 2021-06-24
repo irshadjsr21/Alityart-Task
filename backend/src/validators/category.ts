@@ -32,16 +32,6 @@ export const remove = [
 ];
 
 export const list = [
-  query('page')
-    .trim()
-    .isInt({ min: 1 })
-    .withMessage('Page number is invalid.')
-    .optional(),
-  query('itemsPerPage')
-    .trim()
-    .isInt({ min: 1 })
-    .withMessage('Items per page is invalid.')
-    .optional(),
   query('sort')
     .trim()
     .isIn(['createdAt', 'updatedAt', 'name'])

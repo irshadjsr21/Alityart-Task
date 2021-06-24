@@ -5,26 +5,27 @@
     </div>
   </div>
 
-  <div
-    *ngIf="!isLoading"
-    class="category-container d-flex justify-content-center"
-  >
-    <div *ngFor="let category of categories">
-      <button
-        type="button"
-        class="btn me-2"
-        [ngClass]="{
-          'btn-primary': category.id === selectedCategory,
-          'btn-light': category.id !== selectedCategory
-        }"
-        (click)="onClick(category)"
-      >
-        {{ category.name }}
-      </button>
+  <div *ngIf="!isLoading" class="category-container">
+    <div class="category-scroll">
+      <div class="d-flex justify-content-center">
+        <div *ngFor="let category of categories">
+          <button
+            type="button"
+            class="btn me-2"
+            [ngClass]="{
+              'btn-primary': category.id === selectedCategory,
+              'btn-light': category.id !== selectedCategory
+            }"
+            (click)="onClick(category)"
+          >
+            {{ category.name }}
+          </button>
+        </div>
+        <button type="button" class="btn btn-secondary" (click)="onAddOpen()">
+          + Add
+        </button>
+      </div>
     </div>
-    <button type="button" class="btn btn-secondary" (click)="onAddOpen()">
-      + Add
-    </button>
   </div>
   <div class="backdrop" [ngClass]="{ show: showAddCategory }"></div>
   <!-- Modal -->

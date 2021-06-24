@@ -29,6 +29,8 @@ export class CategoryService {
   public isAddLoading = false;
   public isAddError = '';
 
+  private _deleteCategory = new BehaviorSubject<string>('');
+
   constructor(private http: HttpClient) {}
 
   get categories() {
@@ -37,6 +39,10 @@ export class CategoryService {
 
   get isAddDataObserver() {
     return this._isAddData.asObservable();
+  }
+
+  get deleteCategoryObserver() {
+    return this._deleteCategory.asObservable();
   }
 
   load() {
@@ -107,6 +113,41 @@ export class CategoryService {
           this._isAddData.next({
             isAddError: this.isAddError,
             isAddLoading: this.isAddLoading
+          });
+        }
+      );
+  }
+
+  deleteCategory(id: string) {
+    this.isLoading = true;
+    this._categories.next({
+      categories: [...this.categoriesData],
+      isLoading: this.isLoading
+    });
+
+    this.http
+      .delete<{ product: Category }>(`${this.apiUrl}/${id}`, {
+        headers: this.headers
+      })
+      .subscribe(
+        data => {
+          console.log(data);
+          this.categoriesData = this.categoriesData.filter(
+            elem => elem.id !== id
+          );
+          this.isLoading = false;
+          this._categories.next({
+            categories: [...this.categoriesData],
+            isLoading: this.isLoading
+          });
+          this._deleteCategory.next(id);
+        },
+        error => {
+          console.log(error);
+          this.isLoading = false;
+          this._categories.next({
+            categories: [...this.categoriesData],
+            isLoading: this.isLoading
           });
         }
       );

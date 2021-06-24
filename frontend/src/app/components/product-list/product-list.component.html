@@ -1,0 +1,160 @@
+<section>
+  <div *ngIf="isInitialLoading" class="d-flex justify-content-center mt-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isInitialLoading" class="mt-4">
+    <div class="d-flex justify-content-center mb-4">
+      <button type="button" class="btn btn-secondary" (click)="onAddOpen()">
+        + Add Product
+      </button>
+    </div>
+    <div
+      *ngIf="products.length === 0"
+      class="d-flex justify-content-center align-items-center flex-column"
+    >
+      <div class="mb-2">
+        No products available.
+      </div>
+      <button class="btn btn-danger" (click)="onDeleteCategory()">
+        <fa-icon [icon]="trashIcon"></fa-icon> Remove Category
+      </button>
+    </div>
+    <div *ngIf="products.length !== 0">
+      <div
+        class="product-container d-flex justify-content-center flex-wrap"
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()"
+      >
+        <div *ngFor="let product of products" class="m-2">
+          <div class="card" style="width: 18rem; height: 100%;">
+            <div
+              [style.backgroundImage]="'url(' + product.image + ')'"
+              class="card-custom-img"
+            ></div>
+            <div class="card-body">
+              <h5 class="card-title text-center">{{ product.name }}</h5>
+              <p class="card-text text-center">
+                <span class="fw-bold">₹ {{ product.price }}</span>
+              </p>
+              <div class="d-flex justify-content-center">
+                <button class="btn btn-danger" (click)="onDelete(product)">
+                  <fa-icon [icon]="trashIcon"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="d-flex justify-content-center mt-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="backdrop" [ngClass]="{ show: showAddProduct }"></div>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    [ngClass]="{ show: showAddProduct }"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    [style]="showAddProduct ? 'display: block;' : 'display: none'"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="onAddClose()"
+            [disabled]="isAddLoading"
+          ></button>
+        </div>
+        <form [formGroup]="addFormData" (ngSubmit)="onAddSubmit()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="product-name" class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="product-name"
+                placeholder="Name"
+                formControlName="name"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="product-category" class="form-label">Category</label>
+              <select
+                class="form-select"
+                formControlName="categoryId"
+                id="product-category"
+              >
+                <option
+                  *ngFor="let category of categories"
+                  [selected]="category.id === addFormData.value.categoryId"
+                  [value]="category.id"
+                  >{{ category.name }}</option
+                >
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="product-price" class="form-label">Price</label>
+              <input
+                type="number"
+                class="form-control"
+                id="product-price"
+                formControlName="price"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="product-image" class="form-label">Image</label>
+              <input
+                type="text"
+                class="form-control"
+                id="product-image"
+                formControlName="image"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              (click)="onAddClose()"
+              [disabled]="isAddLoading"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <div
+                *ngIf="isAddLoading"
+                class="spinner-border text-primary"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span *ngIf="!isAddLoading">Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
